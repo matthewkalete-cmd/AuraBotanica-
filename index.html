@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuraBotanica | Digital Sanctuary & Spa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
@@ -23,16 +23,21 @@
         }
         .font-serif { font-family: 'Playfair Display', serif; }
         
-        /* Glassmorphism Base */
+        /* Glassmorphism Design Language */
         .glass {
             background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.4);
             transition: all 0.5s ease;
         }
 
-        /* Theme System Classes */
+        /* Full Screen Sweep Transitions for "Pages" */
+        .subpage-view {
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        }
+
+        /* Theme System Classes mapped to current active Aura */
         .theme-primary-text { color: var(--aura-primary); transition: color 0.8s ease; }
         .theme-primary-bg { background-color: var(--aura-primary); transition: background-color 0.8s ease; }
         .theme-accent-text { color: var(--aura-accent); transition: color 0.8s ease; }
@@ -41,7 +46,7 @@
         .theme-border { border-color: var(--aura-accent); transition: border-color 0.8s ease; }
         .theme-badge-text { color: var(--aura-badge-text); transition: color 0.8s ease; }
 
-        /* Dynamic Aura Mood Profiles */
+        /* Aura Profiles */
         body.mood-relax { 
             --aura-primary: #4c1d95; /* Purple 900 */
             --aura-accent: #8b5cf6;  /* Purple 500 */
@@ -66,7 +71,7 @@
 
         /* Floating Background Animation */
         .leaf-float {
-            animation: float 20s infinite linear;
+            animation: float 25s infinite linear;
             pointer-events: none;
             opacity: 0.04;
             transition: color 0.8s ease;
@@ -92,11 +97,33 @@
         .breathe-active { 
             animation: breathe-glow 8s ease-in-out infinite; 
         }
+
+        /* Hidden scrollbars on sweep views */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 <body class="mood-focus overflow-x-hidden">
 
-    <!-- Floating Background Leaves -->
+    <!-- INITIAL STARTUP LOADER SCREEN -->
+    <div id="site-loader" class="fixed inset-0 z-[200] bg-stone-900 flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div class="relative w-28 h-28 mb-6">
+            <div class="absolute inset-0 rounded-full border-4 border-emerald-500/20 animate-ping"></div>
+            <div class="absolute inset-2 rounded-full border-4 border-t-emerald-400 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-emerald-400">
+                <i data-lucide="droplet" class="w-10 h-10 animate-bounce"></i>
+            </div>
+        </div>
+        <p class="font-serif text-2xl text-stone-100 tracking-wider">AuraBotanica</p>
+        <p class="text-[10px] text-stone-400 mt-2 font-mono tracking-[0.25em] uppercase">Steeping Botanical Essences</p>
+    </div>
+
+    <!-- Floating Background Elements -->
     <div class="fixed inset-0 z-0 overflow-hidden">
         <i data-lucide="leaf" class="leaf-float theme-primary-text absolute bottom-[-10%] left-[10%] w-32 h-32"></i>
         <i data-lucide="flower" class="leaf-float theme-primary-text absolute bottom-[-20%] right-[20%] w-48 h-48" style="animation-delay: -5s;"></i>
@@ -127,6 +154,7 @@
         </div>
     </nav>
 
+    <!-- Main Content Grid -->
     <main class="relative z-10 max-w-7xl mx-auto px-6 py-12">
         
         <!-- Header Hero Section -->
@@ -139,7 +167,7 @@
             </p>
         </section>
 
-        <!-- Feature Cards (NOW WIRED UP TO OPEN CHANNELS) -->
+        <!-- Feature Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Library -->
             <div onclick="openLibrary()" class="glass p-8 rounded-[2rem] hover:-translate-y-2 transition-all cursor-pointer group hover:shadow-xl border-2 border-transparent hover:border-white">
@@ -172,89 +200,7 @@
             </div>
         </div>
 
-        <!-- ================= DYNAMIC SECTION: BOTANICAL LIBRARY ================= -->
-        <section id="section-library" class="hidden mt-16 glass rounded-[3rem] p-8 md:p-12 shadow-xl animate-fade-in border border-white">
-            <div class="flex justify-between items-center mb-8 border-b border-black/10 pb-6">
-                <div>
-                    <h2 class="font-serif text-3xl font-bold theme-primary-text">Pure Botanical Library</h2>
-                    <p class="text-sm text-stone-500 mt-1">Safe, classic botanical essences to soothe and support a clean lifestyle.</p>
-                </div>
-                <button onclick="closeAllPanels()" class="p-2 rounded-full hover:bg-black/5 text-stone-500 hover:text-stone-800 transition">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-
-            <!-- List of Oils -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white/60 p-6 rounded-2xl border border-white/40 space-y-3">
-                    <span class="text-xs uppercase font-semibold text-purple-600">Middle Note</span>
-                    <h3 class="font-serif text-xl font-bold theme-primary-text">Lavender</h3>
-                    <p class="text-xs italic text-stone-400">Lavandula angustifolia</p>
-                    <p class="text-xs text-stone-600 leading-relaxed">Universally recognized for its calming, comforting aroma. Perfect for diffusing before bedtime to promote healthy relaxation.</p>
-                </div>
-                <div class="bg-white/60 p-6 rounded-2xl border border-white/40 space-y-3">
-                    <span class="text-xs uppercase font-semibold text-emerald-600">Top Note</span>
-                    <h3 class="font-serif text-xl font-bold theme-primary-text">Peppermint</h3>
-                    <p class="text-xs italic text-stone-400">Mentha piperita</p>
-                    <p class="text-xs text-stone-600 leading-relaxed">Invigorating, cool minty aroma that supports sharp focus and helps clear digital study fatigue.</p>
-                </div>
-                <div class="bg-white/60 p-6 rounded-2xl border border-white/40 space-y-3">
-                    <span class="text-xs uppercase font-semibold text-amber-600">Top Note</span>
-                    <h3 class="font-serif text-xl font-bold theme-primary-text">Sweet Orange</h3>
-                    <p class="text-xs italic text-stone-400">Citrus sinensis</p>
-                    <p class="text-xs text-stone-600 leading-relaxed">Warm, bright, and cheerful. Great for safe daytime diffusion to lift spirits and keep a clean scent in study rooms.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= DYNAMIC SECTION: DILUTION CALCULATOR ================= -->
-        <section id="section-calculator" class="hidden mt-16 glass rounded-[3rem] p-8 md:p-12 shadow-xl border border-white">
-            <div class="flex justify-between items-center mb-8 border-b border-black/10 pb-6">
-                <div>
-                    <h2 class="font-serif text-3xl font-bold theme-primary-text">Precision Dilution Calculator</h2>
-                    <p class="text-sm text-stone-500 mt-1">Always dilute pure essential oils in a gentle carrier oil (like jojoba, almond, or coconut oil) before skin application.</p>
-                </div>
-                <button onclick="closeAllPanels()" class="p-2 rounded-full hover:bg-black/5 text-stone-500 hover:text-stone-800 transition">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Inputs -->
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">Select Preset Dilution Strength</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="setCalPreset(1)" class="p-3 bg-white/50 border border-stone-200 rounded-xl text-left text-xs font-semibold hover:border-emerald-500 transition">
-                                <span class="block text-stone-800">Gentle Skin Care (1%)</span>
-                                <span class="text-stone-400 font-normal">Ideal for face or gentle massage</span>
-                            </button>
-                            <button onclick="setCalPreset(2)" class="p-3 bg-white/50 border border-stone-200 rounded-xl text-left text-xs font-semibold hover:border-emerald-500 transition">
-                                <span class="block text-stone-800">Standard Body (2%)</span>
-                                <span class="text-stone-400 font-normal">Standard daily body rub recipe</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-xs font-bold text-stone-500 uppercase">
-                            <span>Volume of Carrier Oil</span>
-                            <span id="volume-val">1 fl oz</span>
-                        </div>
-                        <input type="range" id="volume-slider" min="1" max="8" step="1" value="1" oninput="runCalulations()" class="w-full h-1 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-emerald-800">
-                    </div>
-                </div>
-
-                <!-- Results Output -->
-                <div class="bg-white/40 p-6 rounded-2xl border border-white/60 flex flex-col justify-center items-center text-center">
-                    <span class="text-xs uppercase font-bold text-stone-400">Total Essential Oil Drops Needed</span>
-                    <span id="drops-output" class="text-6xl font-serif font-bold my-4 theme-primary-text">12</span>
-                    <p class="text-xs text-stone-500 leading-relaxed max-w-xs">Always dilute properly and patch-test a small spot on your forearm first. Keep essential oils away from eyes and mouth.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Resonance Therapy Widget -->
+        <!-- Resonance Therapy Control Widget -->
         <section class="mt-20 glass rounded-[3rem] p-12 flex flex-col md:flex-row items-center gap-12 shadow-2xl overflow-hidden relative">
             <div class="absolute top-0 right-0 p-8 opacity-10">
                 <i data-lucide="waves" class="w-40 h-40 theme-primary-text"></i>
@@ -266,7 +212,7 @@
                 <p class="text-stone-600">Our site generates a real-time 528Hz frequency—often called the "Love Frequency"—designed to encourage cellular repair and deep peace.</p>
                 
                 <div class="flex items-center gap-4">
-                    <button id="play-btn" onclick="toggleAudio()" class="w-16 h-16 theme-primary-bg text-white rounded-full flex items-center justify-center hover:scale-110 transition shadow-xl">
+                    <button id="play-btn" onclick="toggleAudio()" class="w-16 h-16 theme-primary-bg text-white rounded-full flex items-center justify-center hover:scale-110 transition shadow-xl animate-pulse">
                         <i data-lucide="play" id="play-icon" class="w-6 h-6"></i>
                     </button>
                     <div>
@@ -286,6 +232,180 @@
         </section>
     </main>
 
+    <!-- ================= "NEW FULLPAGE SWEEP": BOTANICAL LIBRARY PAGE ================= -->
+    <section id="page-library" class="subpage-view fixed inset-0 z-50 bg-stone-50/95 backdrop-blur-3xl overflow-y-auto translate-y-full no-scrollbar px-6 md:px-12 py-10">
+        <div class="max-w-7xl mx-auto space-y-8">
+            <!-- Header navigation bar -->
+            <div class="flex items-center justify-between border-b border-stone-200 pb-6">
+                <div class="flex items-center gap-4">
+                    <button onclick="closeAllPanels()" class="p-3 rounded-2xl bg-stone-100 hover:bg-stone-200 transition text-stone-700">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    </button>
+                    <div>
+                        <span class="text-xs font-semibold theme-accent-text uppercase tracking-widest">Botanical Pharmacy</span>
+                        <h2 class="font-serif text-3xl md:text-4xl font-bold theme-primary-text mt-0.5">AuraBotanica Archives</h2>
+                    </div>
+                </div>
+                
+                <!-- Quick interactive search -->
+                <div class="relative w-64 md:w-80">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-stone-400">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                    <input type="text" id="lib-search" oninput="searchLibraryOils()" placeholder="Search Lavender, mint, calmness..." class="w-full pl-9 pr-4 py-2 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 theme-border transition text-sm">
+                </div>
+            </div>
+
+            <!-- Interactive category filters -->
+            <div class="flex flex-wrap gap-2 py-1">
+                <button onclick="filterLibGenre('all')" class="lib-tab-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-stone-200 text-stone-800" id="tab-all">All Oils</button>
+                <button onclick="filterLibGenre('relax')" class="lib-tab-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200" id="tab-relax">Relax</button>
+                <button onclick="filterLibGenre('focus')" class="lib-tab-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200" id="tab-focus">Focus</button>
+                <button onclick="filterLibGenre('energy')" class="lib-tab-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200" id="tab-energy">Energy</button>
+            </div>
+
+            <!-- Grid containing detailed botanical cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20" id="library-grid">
+                <!-- Lavender -->
+                <div class="lib-card bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-4" data-mood="relax" data-search="lavender relaxation sleep calming floral">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs uppercase font-semibold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Middle Note</span>
+                        <i data-lucide="heart" class="w-4 h-4 text-purple-500 fill-current"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-950">Lavender</h3>
+                    <p class="text-xs italic text-stone-400">Lavandula angustifolia</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">Universally recognized for its balancing, herbal aroma. Excellent for bedtime aromatherapy to cultivate quiet, healthy rest.</p>
+                </div>
+
+                <!-- Peppermint -->
+                <div class="lib-card bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-4" data-mood="focus" data-search="peppermint mint clarity focus cool refresh">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs uppercase font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Top Note</span>
+                        <i data-lucide="zap" class="w-4 h-4 text-emerald-500 fill-current"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-950">Peppermint</h3>
+                    <p class="text-xs italic text-stone-400">Mentha piperita</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">Tingling, crisp, and mentally sharpening. Perfect for clearing away studying fatigue or physical lethargy.</p>
+                </div>
+
+                <!-- Sweet Orange -->
+                <div class="lib-card bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-4" data-mood="energy" data-search="sweet orange bright cheer sun happy positive">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs uppercase font-semibold text-amber-600 bg-amber-50 px-3 py-1 rounded-full">Top Note</span>
+                        <i data-lucide="sun" class="w-4 h-4 text-amber-500 fill-current"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-950">Sweet Orange</h3>
+                    <p class="text-xs italic text-stone-400">Citrus sinensis</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">Comforting, sunny, and sweet. Instills a cheeriness into the surrounding space while purifying persistent room odors.</p>
+                </div>
+
+                <!-- Eucalyptus -->
+                <div class="lib-card bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-4" data-mood="focus" data-search="eucalyptus respiratory breathing cold congestion fresh forest">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs uppercase font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Top Note</span>
+                        <i data-lucide="wind" class="w-4 h-4 text-emerald-500 fill-current"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-950">Eucalyptus</h3>
+                    <p class="text-xs italic text-stone-400">Eucalyptus globulus</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">Rich in eucalyptol, promoting clear airways and deeply cooling respirations. Widely used for invigorating steam inhalations.</p>
+                </div>
+
+                <!-- Chamomile -->
+                <div class="lib-card bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-4" data-mood="relax" data-search="chamomile gentle chamomile sleep rest calm peace skin">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs uppercase font-semibold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Middle Note</span>
+                        <i data-lucide="smile" class="w-4 h-4 text-purple-500 fill-current"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-950">Chamomile</h3>
+                    <p class="text-xs italic text-stone-400">Matricaria chamomilla</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">Highly revered as a gentle, daisy-like herbal extract that supports mental tranquility, settles fretfulness, and cares for sensitive skin.</p>
+                </div>
+
+                <!-- Frankincense -->
+                <div class="lib-card bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-4" data-mood="relax" data-search="frankincense wood king royal skin aging meditation peace">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs uppercase font-semibold text-stone-600 bg-stone-50 px-3 py-1 rounded-full">Base Note</span>
+                        <i data-lucide="shield" class="w-4 h-4 text-stone-500 fill-current"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-950">Frankincense</h3>
+                    <p class="text-xs italic text-stone-400">Boswellia carterii</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">The ancient "King of Resins" providing a warm, comforting background anchor. Encourages meditative focus and rejuvenates tired skin.</p>
+                </div>
+
+                <!-- Lemon -->
+                <div class="lib-card bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-4" data-mood="energy" data-search="lemon zesty brightness energy wake alert sharp">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs uppercase font-semibold text-amber-600 bg-amber-50 px-3 py-1 rounded-full">Top Note</span>
+                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-500 fill-current"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-950">Lemon</h3>
+                    <p class="text-xs italic text-stone-400">Citrus limon</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">Highly zesty and bright. Known to clear away morning brain fog, promote natural hand cleansing, and keep spaces smelling vibrant.</p>
+                </div>
+
+                <!-- Rosemary -->
+                <div class="lib-card bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-4" data-mood="focus" data-search="rosemary memory hair study focus learn active herbs">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs uppercase font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Middle Note</span>
+                        <i data-lucide="brain" class="w-4 h-4 text-emerald-500 fill-current"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-950">Rosemary</h3>
+                    <p class="text-xs italic text-stone-400">Rosmarinus officinalis</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">A powerful cognitive trigger. Research supports its role in aiding memory recall during studying and supporting physical scalp hair health.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= "NEW FULLPAGE SWEEP": DILUTION CALCULATOR PAGE ================= -->
+    <section id="page-calculator" class="subpage-view fixed inset-0 z-50 bg-stone-50/95 backdrop-blur-3xl overflow-y-auto translate-y-full no-scrollbar px-6 md:px-12 py-10">
+        <div class="max-w-7xl mx-auto space-y-8">
+            <div class="flex items-center gap-4 border-b border-stone-200 pb-6">
+                <button onclick="closeAllPanels()" class="p-3 rounded-2xl bg-stone-100 hover:bg-stone-200 transition text-stone-700">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div>
+                    <span class="text-xs font-semibold theme-accent-text uppercase tracking-widest">Safe Ratios</span>
+                    <h2 class="font-serif text-3xl md:text-4xl font-bold theme-primary-text mt-0.5">Precision Dilution Calculator</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-20">
+                <!-- Inputs -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">Select Preset Dilution Strength</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setCalPreset(1)" class="p-4 bg-white border border-stone-200 rounded-xl text-left text-xs font-semibold hover:border-emerald-500 transition shadow-sm">
+                                <span class="block text-stone-800">Gentle Skin Care (1%)</span>
+                                <span class="text-stone-400 font-normal mt-0.5">Ideal for face or gentle massage recipes</span>
+                            </button>
+                            <button onclick="setCalPreset(2)" class="p-4 bg-white border border-stone-200 rounded-xl text-left text-xs font-semibold hover:border-emerald-500 transition shadow-sm">
+                                <span class="block text-stone-800">Standard Body (2%)</span>
+                                <span class="text-stone-400 font-normal mt-0.5">Standard daily body rub recipe strength</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-xs font-bold text-stone-500 uppercase">
+                            <span>Volume of Carrier Oil</span>
+                            <span id="volume-val" class="theme-badge-text font-mono font-bold">1 fl oz</span>
+                        </div>
+                        <input type="range" id="volume-slider" min="1" max="8" step="1" value="1" oninput="runCalulations()" class="w-full h-1 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-emerald-800">
+                    </div>
+                </div>
+
+                <!-- Results Output -->
+                <div class="bg-white/70 p-8 rounded-3xl border border-white flex flex-col justify-center items-center text-center shadow-sm">
+                    <span class="text-xs uppercase font-bold text-stone-400">Total Essential Oil Drops Needed</span>
+                    <span id="drops-output" class="text-7xl font-serif font-bold my-4 theme-primary-text">12</span>
+                    <p class="text-xs text-stone-500 leading-relaxed max-w-xs">Always dilute properly inside carrier oil and patch-test a small spot on your forearm first. Keep essential oils away from eyes, mouth, and pets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Fullscreen Spa Mode Overlay -->
     <div id="spa-overlay" class="fixed inset-0 z-[100] bg-stone-950/95 backdrop-blur-3xl flex items-center justify-center text-center p-6 transition-all duration-1000 translate-y-full">
         <button onclick="toggleSpaMode()" class="absolute top-10 right-10 text-white/50 hover:text-white">
@@ -303,6 +423,14 @@
 
     <!-- Web Audio API Ambient Player System -->
     <script>
+        // Simulate premium loader before showing site
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('site-loader');
+            setTimeout(() => {
+                loader.classList.add('opacity-0', 'pointer-events-none');
+            }, 1200); // 1.2 second show duration for satisfying aesthetic
+        });
+
         lucide.createIcons();
 
         let isPlaying = false;
@@ -318,25 +446,30 @@
         // Dilution Variables
         let currentDilutionStrength = 1; // 1% default
 
-        // --- PAGE LAYOUT SWITCHING ---
+        // --- PAGE TRANSITION NAVIGATION SWEEPS ---
         function openLibrary() {
             closeAllPanels();
-            document.getElementById('section-library').classList.remove('hidden');
-            document.getElementById('section-library').scrollIntoView({ behavior: 'smooth' });
+            const panel = document.getElementById('page-library');
+            panel.classList.remove('translate-y-full');
+            document.body.classList.add('overflow-hidden');
+            searchLibraryOils(); // Init grid
         }
 
         function openCalculator() {
             closeAllPanels();
-            document.getElementById('section-calculator').classList.remove('hidden');
-            document.getElementById('section-calculator').scrollIntoView({ behavior: 'smooth' });
+            const panel = document.getElementById('page-calculator');
+            panel.classList.remove('translate-y-full');
+            document.body.classList.add('overflow-hidden');
             runCalulations();
         }
 
         function closeAllPanels() {
-            document.getElementById('section-library').classList.add('hidden');
-            document.getElementById('section-calculator').classList.add('hidden');
+            document.getElementById('page-library').classList.add('translate-y-full');
+            document.getElementById('page-calculator').classList.add('translate-y-full');
+            document.body.classList.remove('overflow-hidden');
         }
 
+        // --- DILUTION CALCULATION ENGINE ---
         function setCalPreset(percent) {
             currentDilutionStrength = percent;
             runCalulations();
@@ -355,10 +488,51 @@
             document.getElementById('drops-output').textContent = drops;
         }
 
+        // --- BOTANICAL LIBRARY FILTERS & SEARCH ---
+        function filterLibGenre(mood) {
+            // Update active state of button tabs
+            const tabs = document.querySelectorAll('.lib-tab-btn');
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-stone-200', 'text-stone-800');
+                tab.classList.add('bg-stone-100', 'text-stone-600');
+            });
+
+            const activeBtn = document.getElementById(`tab-${mood}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-stone-100', 'text-stone-600');
+                activeBtn.classList.add('bg-stone-200', 'text-stone-800');
+            }
+
+            // Perform filtering
+            const cards = document.querySelectorAll('.lib-card');
+            cards.forEach(card => {
+                const cardMood = card.getAttribute('data-mood');
+                if (mood === 'all' || cardMood === mood) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function searchLibraryOils() {
+            const val = document.getElementById('lib-search').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.lib-card');
+
+            cards.forEach(card => {
+                const terms = card.getAttribute('data-search');
+                if (terms.includes(val) || val === '') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // --- AURA MOOD SELECTOR ---
         function setMood(mood) {
             const body = document.body;
             const title = document.getElementById('hero-title');
-            const accentWord = document.getElementById('hero-accent-word');
             const desc = document.getElementById('hero-desc');
             const soundName = document.getElementById('current-sound');
 
@@ -475,3 +649,4 @@
     </script>
 </body>
 </html>
+
